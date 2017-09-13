@@ -21,12 +21,29 @@ class Wordfreq
   end
 
   def frequencies
+    new_hash = {}
+    @@contents_array.each do |word|
+      if STOP_WORDS.include? word
+        #ignore the word if it's in our list
+      elsif new_hash[word].nil?
+        new_hash[word] = 1
+      else
+        new_hash[word] += 1
+      end
+    end
+    return new_hash
   end
 
   def top_words(number)
+    word_array = frequencies.sort_by{ |word, count| [count, word] }.reverse
+    word_array[0..number-1]
   end
 
   def print_report
+    top_ten = top_words(10)
+    top_ten.each do |word, count|
+      puts "  #{word} | #{count} " + "*"*count
+    end
   end
 end
 
